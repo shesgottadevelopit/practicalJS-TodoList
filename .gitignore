@@ -2,8 +2,6 @@
 .*
 ~*
 
-
-
 # ignore OS generated files
 Thumbs.db
 

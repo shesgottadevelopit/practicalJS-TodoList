@@ -9,16 +9,59 @@
 
         <h2>Todo List </h2>
 
-        <!-- display todos button-->
+        <!-- Version 7 and below
         <button id="displayTodosButton" class="display-todos">Display Todos</button>
-
-        <!-- toggle all button-->
         <button id="toggleAllButton" class="toggle-all">Toggle All</button>
+        -->
+
+        <!-- Version 8 onward -->
+
+        <div>
+
+            <!-- display todos button NO LONGER NEEDED AFTER V9
+            <button onclick="handlers.displayTodos()" class="display-todos">Display Todos</button>
+            -->
+
+            <!-- toggle all button-->
+            <button onclick="handlers.toggleAll()" class="toggle-all">Toggle All</button>
+        </div>
+
+        <div>
+            <!-- add todos button-->
+            <button onclick="handlers.addTodo()" type="button" name="button">Add</button>
+            <input type="text" value="todo" id="addTodoTextInput">
+        </div>
+
+        <div>
+            <!-- change todos button-->
+            <button onclick="handlers.changeTodo()">Change</button>
+            <input type="number" id="changeTodoPositionInput">
+            <input type="text" id="changeTodoTextInput">
+        </div>
+
+        <div>
+            <!-- delete todos button-->
+            <button onclick="handlers.deleteTodo()">Delete</button>
+            <input type="number" id="deleteTodoPositionInput">
+
+        </div>
+
+        <div>
+            <!-- toggle item completed button-->
+            <button onclick="handlers.toggleCompleted()">Toggle Completed</button>
+            <input type="number" id="toggleCompletedPositionInput">
+
+        </div>
+
+        <!-- will include list items -->
+        <div>
+            <ul>
+
+            </ul>
+        </div>
 
 
-
-
-
+<!-- Older versions of the todo-list app script
 
         <script src="v1-Arrays.js" type="text/javascript"></script>
         <script src="v2-Functions.js" type="text/javascript"></script>
@@ -27,5 +70,11 @@
         <script src="v5-LoopsOfLogic.js" type="text/javascript"></script>
         <script src="v6-ThinkingInCode.js" type="text/javascript"></script>
         <script src="v7-HTMLandTheDOM.js" type="text/javascript"></script>
+        <script src="v7.5-Debugger.js" type="text/javascript"></script>
+        <script src="v8-GettingDataFromInputs.js" type="text/javascript"></script>
+        <script src="v9-EscapeFromTheConsole.js" type="text/javascript"></script>
+
+-->
+        <script src="v10-ClickToDelete.js" type="text/javascript"></script>
     </body>
 </html>
