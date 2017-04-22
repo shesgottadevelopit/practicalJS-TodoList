@@ -1,5 +1,5 @@
 /****  V7 requirements:
-- there should be a "display todos" button and a "toggle all" button in the app; this is accomplished via HTML
+- there should be a "display todos" button and a "toggle all" button in the app using HTML
 - clicking "display todos" should run todoList.displayTodos
 - clicking "toggle all" should run todoList.toggleAll
 
@@ -80,4 +80,20 @@ var todoList = {
         };
         this.displayTodos();
     },
-}
+};
+
+// DOM Manipulation
+var displayTodosButton = document.getElementById("displayTodosButton");
+var toggleAllButton = document.getElementById("toggleAllButton");
+
+displayTodosButton.addEventListener("click", function(){
+	// this is a method on the displayTodosButton, and when the click happens it will run the function
+	todoList.displayTodos(); // this will still display in the console but it's activated via the browser user interface
+
+});
+
+toggleAllButton.addEventListener("click", function() {
+    todoList.toggleAll();
+});
+
+// EVERYTHING IS WORKING SO FAR SO GOOD!

@@ -337,7 +337,8 @@ We've reached our limit on what we can do in the web console, so now we need to 
 DOM - Document Object Model
 - HTML is plain text that gives the browser info about the page but the DOM is what the browser understands this document to be
 - The browser's interpretation of your HTML is the DOM
-**The Lynda.com JS Essential course helps explain what the DOM is and how it relates to HTML and JS**
+
+**The Lynda.com JS Essential course helps explain what the DOM is and how it relates to HTML and JS. So if anyone is reading this, I'd suggest you check out their resource**
 
 This course's explanation: "JavaScript is a language that the browser reads and does stuff with. But the DOM is where that stuff happens. In fact a lot of what you might think of as a "JavaScript Thing" is more accurately a "DOM API"."
 
@@ -349,46 +350,49 @@ __Aside: It's best to add your script tag to the bottom of the body tag because 
 
 Now to actually work on our project requirements:
 
-##### Requirement 1. there should be a "display todos" button and a "toggle all" button in the app
+##### Requirement 1: there should be a "display todos" button and a "toggle all" button in the app
 We'll accomplish this in HTML using the following:
 
 ```HTML
-<button>
-</button>
+<!-- display todos button-->
+<button id="displayTodosButton" class="display-todos">Display Todos</button>
 
-<button>
-</button>
+<!-- toggle all button-->
+<button id="toggleAllButton" class="toggle-all">Toggle All</button>
 ```
 
+##### Requirement 2: clicking "display todos" should run todoList.displayTodos
+We need to figure out how we can access the buttons through JS. If you type document in the console, it will print the actual document
 
-##### Requirement 2. clicking "display todos" should run todoList.displayTodos
+Two steps of this requirement include:
+1. we want access to display todos button
+2. we want to run displayTodos method when a user clicks this button
 
-
-##### Requirement 3. clicking "toggle all" should run todoList.toggleAll
-
+To access the displayTodos button, we'll need to create a variable in our JS file and then use the document's METHODS to select specific elements:
 
 ```javascript
-// r2: clicking "display todos" should run todoList.displayTodos
-// we want access to display todos button
-
 var displayTodosButton = document.getElementById("displayTodosButton");
+```
+Insert this at the bottom of our JS file outside of the object and test using `console.log(displayTodosButton);`
 
+Next we need to run the `displayTodos();` method on a user click. We can do that with an event listener.
 
-// want to run displayTodos() method when someone clicks the todos button
-// to do this, we can use an EventListener, which listens for an event to happen and then it will do "x"
+```javascript
 displayTodosButton.addEventListener("click", function(){
 	// this is a method on the displayTodosButton, and when the click happens it will run the function
-	todoList.displayTodos();
-	// this will still display in the console but it's activated via the browser user interface
-
-});
-
-// r3: clicking "toggle all" should run todoList.toggleAll
-var toggleAllButton = document.getElementById("toggleAllButton");
-toggleAllButton.addEventListener("click", function(){
-	todoList.toggleAll();
-
+	todoList.displayTodos(); // this will still display in the console but it's activated via the browser user interface
 
 });
 ```
-// learning which event listeners and DOM methods take arguments
+
+##### Requirement 3: clicking "toggle all" should run todoList.toggleAll
+
+This will follow a very similar formula as the previous requirement:
+```javascript
+var toggleAllButton = document.getElementById("toggleAllButton");
+
+toggleAllButton.addEventListener("click", function() {
+    todoList.toggleAll();
+});
+
+```
