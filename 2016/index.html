@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Practical JS: Practice</title>
+  <!-- <link rel="stylesheet" href="style.css"> -->
+
+</head>
+
+
+  <body>
+    <h1>Todo List</h1>
+	
+	<!-- old code
+	<button id="displayTodosButton">Display Todos </button>
+	<button id="toggleAllButton">Toggle All </button>
+	-->
+	
+	<!-- on-click will call a function which will be the attribute -->
+	<div>
+	<!-- we don't need this anymore <button onclick="handlers.displayTodos()">Display Todos </button>  --> 
+	<button onclick="handlers.toggleAll()">Toggle All </button>
+	</div>
+	
+	<div>
+	<input type="text" name="Add New Todo" id="addTodoTextInput">
+	<button onclick="handlers.addTodo()">Add Todo</button>
+	</div>
+	
+	<div>
+	<input type="number" name="Change Todo Position" id="changeTodoPositionInput">
+	<input type="text" name="Change Todo Text" id="changeTodoTextInput">
+	<button onclick="handlers.changeTodo()">Change Todo</button>
+	</div>
+	
+	<div>
+	<input type="number" name="Delete New Todo" id="deleteTodoPositionInput">
+	<button onclick="handlers.deleteTodo()">Delete Todo</button>
+	</div>
+	
+	<div>
+	<input type="number" id="toggleCompletedPositionInput">
+	<button onclick="handlers.toggleCompleted()">Toggle Completed</button>
+	
+	</div>
+	<!-- where the todo list will populate -->
+	<ul>
+	
+	
+	</ul>
+	
+	
+	<script src="script.js"></script>
+  </body>
+
+</html>
