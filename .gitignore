@@ -1,0 +1,11 @@
+# Ignore everything in the following
+.*
+~*
+
+
+
+# ignore OS generated files
+Thumbs.db
+
+# don't ignore .gitignore
+!.gitignore
