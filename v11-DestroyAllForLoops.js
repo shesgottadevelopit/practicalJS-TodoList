@@ -1,11 +1,8 @@
-/****  V10 requirements:
+/****  V11 requirements:
 
 Requirements:
-1: There should be a way to create delete buttons
-2: There should be a delete button for each todo
-3: Each li should have an id that has the todo position
-4: Delete buttons should have access to the todo ID
-5: Clicking delete should update todoList.todos and the DOM
+1. todoList.toggleAll should use forEach
+2. view.displayTodos should use forEach
 
 
 ****/
@@ -43,24 +40,24 @@ var todoList = {
     toggleAll: function() {
         var totalTodos = this.todos.length;
         var completedTodos = 0;
-        for (var i = 0; i < totalTodos; i++) {
-            if(this.todos[i].completed === true) {
+
+        this.todos.forEach(function(todo){
+            if(todo.completed === true) { // we don't need to reference the position any longer because we're passing in the variable todo that corresponds to each todo item that will be looped through.
                 completedTodos++;
             }
-        }
+        });
 
-        if (completedTodos === totalTodos) {
-            //make everything false
-            for(var i = 0; i < totalTodos; i++) {
-                this.todos[i].completed = false;
-            }
+        this.todos.forEach(function(todo){
 
-        } else {
-            //make everything true
-            for(var i = 0; i < totalTodos; i++) {
-                this.todos[i].completed = true;
+            if (completedTodos === totalTodos) {
+
+                //make everything false
+                todo.completed = false;
+            } else {
+                // make everything true
+                todo.completed = true;
             }
-        };
+        });
     },
 };
 
@@ -105,12 +102,11 @@ var views = {
         var todosUL = document.querySelector("ul");
         todosUL.innerHTML = "";
 
-        for(var i = 0; i < todoList.todos.length; i++) {
-
+        todoList.todos.forEach(function(todo, position){
             var todoLI = document.createElement("li");
 
             var todoTextWithCompletion = "";
-            var todo = todoList.todos[i];
+            // NO LONGER NEEDED var todo = todoList.todos[i];
 
             if(todo.completed === true) {
                 todoTextWithCompletion =" ( x ) " + todo.todoText;
@@ -118,12 +114,11 @@ var views = {
                 todoTextWithCompletion =" (  ) " + todo.todoText;
             }
 
-            todoLI.id = i;
+            todoLI.id = position; // changed from a variable
             todoLI.textContent = todoTextWithCompletion;
-            todoLI.appendChild(this.createDeleteButton());
+            todoLI.appendChild(views.createDeleteButton());
             todosUL.appendChild(todoLI);
-
-        }
+        });
     },
     createDeleteButton: function() {
         var deleteButton = document.createElement("button");

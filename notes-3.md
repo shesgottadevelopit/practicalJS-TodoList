@@ -571,25 +571,307 @@ Requirements:
 2: There should be a delete button for each todo
 3: Each li should have an id that has the todo position
 4: Delete buttons should have access to the todo ID
-5: Clicking delete should update todoList.todos and the DOM
+5: Clicking delete should update `todoList.todos` and the DOM
 
 
 ##### Requirement 1: There should be a way to create delete buttons
+We can add another method onto the view object for the delete button after the displayTodos method in views.
+
+```javascript
+createDeleteButton: function() {
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.className = "deleteButton";
+    return deleteButton;
+}
+
+```
+So what we want to happen here is that the `createDeleteButton` method will create a delete button. We can call this function within the displayTodos method which will actually create the button for each item.
+
+1. `delete.textContent` adds text to the button element we've created
+2. `delete.className` adds a class to the button
 
 
 ##### Requirement 2: There should be a delete button for each todo
+We need to create a way to append the delete button to each todo item
+
+So within our `displayTodos` method of views, we can then add the following code:
+
+```javascript
+todoLI.appendchild(this.createDeleteButton()); // using THIS since they're on the same object
+
+```
+To test you'd just add an item, and the `deleteButton` will appear next to it. But the `deleteButton` doesn't do anything yet since we haven't created an eventListener for it just yet.
 
 
 ##### Requirement 3: Each li should have an id that has the todo position
+"On My Own" Attempt: We'll need a way to create a reference to each todo position using it's index and apply that index as a property.
 
+---
+I was almost on track, instead we'll add an ID to each LI item and it will be equal to the `i` variable that we use to loop through array items.
+
+```javascript
+todoLI.id = i;
+```
+And when you inspect each list item, you should see an id that corresponds to each items position within the array
 
 ##### Requirement 4: Delete buttons should have access to the todo ID
+"On My Own" Attempt: We're going to create a method similar to `displayTodos`
+
+The strategy for this part is that you'll add an eventListener to the `ul` so that it triggers and then the code will figure out exactly what element inside the ul was triggered and then the resulting sequence of events.
+
+We're not adding an event listener to our `createDeleteButton` object because then that would add an event listener to each button/ list item. Depending on the number of todo list items, that is a lot of event listeners.
+
+```javascript
+var todosUL = document.querySelector("ul");
+todosUL.addEventListener("click", function(event) {
+    console.log(event);
+});
+
+```
+Explanation:  whenever a click happens, it will run the function and it will pass in an event object. Each time it will log out an object with properties of the event that was triggered. One of the properties is `target` which shows what was actually clicked on.
+
+Unfortunately `deleteButton` doesn't have the ID number, that is attached to the LI element. But you can access it using the `parentNode` property of the DOM.
+
+```javascript
+var todosUL = document.querySelector("ul");
+todosUL.addEventListener("click", function(event) {
+    console.log(event.target.parentNode.id);
+});
+
+```
+When you click the delete button on the page, the console should log the position of the todo list item. And that is how you'll access the id of the `li` through the button element.
 
 
 ##### Requirement 5: Clicking delete should update todoList.todos and the DOM
+To make this work we'll need to do the following:
+- get the element that was clicked on and save that within a variable
+- check if the element clicked is the `deleteButton`
+
+```javascript
+
+var todosUL = document.querySelector("ul");
+
+todosUL.addEventListener("click", function(event) {
+
+    // get the element that was clicked on
+    var elementClicked = event.target;
+
+    // Check if elementClicked is a delete button
+    if(elementClicked.className === "deleteButton") {
+
+        //run event handler
+        // handlers.deleteTodo;
+    }
+});
+
+```
+Now that we've made that connection between the element clicked, it's class name and the event handler, we need to revisit the `deleteTodo` handler. In it's original version, we needed to include the position number in order to delete it from the console.  We'll need to update it and remove the position input because we don't need it since the `li` item has that as an ID number already embedded and we're able to target it using the `deleteButton`. See below:
+
+```javascript
+deleteTodo: function(position) { // changed from .valueAsNumber
+    todoList.deleteTodo(position);
+    views.displayTodos();
+}
+```
+Explanation: we're passing in a position into the `deleteTodo` handler object and that will then be used to delete the item.
 
 
+Now when we go back to our event listener for the todosUL, we'll just need to pass in a reference to the todo items position which would be `event.target.parentNode.id`. The only issue is that this returns as a string and we need a number.
 
+So we can use the JS function `parseInt` which will convert a string to a number. We'll wrap that around `event.target.parentNode.id` and then add that as the argument for our `deleteTodo` event handler.
+```javascript
+parseInt(event.target.parentNode.id)
+```
 
+Everything should work now!
+
+_Clean up code_
+Now that we've finished that, we're going to move that `deleteButton` handler into our views object as it is concerned with user views. it will be stored within the `setUpEventListeners` method of the views object. bless up!
+
+One last thing though... because that `deleteButton` event listener is now stored within an object, it won't run unless we call it so we have to add the following to our code as well: `views.setUpEventListeners();`
+
+**New terminology: event delegation**
 
 ## Version 11: Destroy all for loops
+
+**Requirements:**
+1. todoList.toggleAll should use forEach
+2. view.displayTodos should use forEach
+
+This version will delete all the for loops
+
+##### Requirement 1: todoList.toggleAll should use forEach
+
+The general format of forEach is: `objectArray.forEach(function);`
+
+The original method we want to modify:
+
+```javascript
+
+//our new feature!!
+toggleAll: function() {
+    var totalTodos = this.todos.length;
+    var completedTodos = 0;
+    for (var i = 0; i < totalTodos; i++) {
+        if(this.todos[i].completed === true) {
+            completedTodos++;
+        }
+    }
+
+    if (completedTodos === totalTodos) {
+        //make everything false
+        for(var i = 0; i < totalTodos; i++) {
+            this.todos[i].completed = false;
+        }
+
+    } else {
+        //make everything true
+        for(var i = 0; i < totalTodos; i++) {
+            this.todos[i].completed = true;
+        }
+    };
+},
+```
+
+The modified version:
+```javascript
+
+//our new feature!!
+toggleAll: function() {
+    var totalTodos = this.todos.length;
+    var completedTodos = 0;
+
+    this.todos.forEach(function(todo){
+        if(todo.completed === true) { // we don't need to reference the position any longer because we're passing in the variable todo that corresponds to each todo item that will be looped through.
+            completedTodos++;
+        }
+    });
+
+    if (completedTodos === totalTodos) {
+        //make everything false
+        this.todos.forEach(function(todo){ // similar to the above forEach
+            todo.completed = false;
+        });
+
+
+    } else {
+        //make everything true
+        this.todos.forEach(function(todo){
+            todo.completed = true;
+        });
+    };
+},
+```
+Next we're going to collapse the last to `forEach` statement... condense it:
+
+```javascript
+
+//our new feature!!
+toggleAll: function() {
+    var totalTodos = this.todos.length;
+    var completedTodos = 0;
+
+    this.todos.forEach(function(todo){
+        if(todo.completed === true) { // we don't need to reference the position any longer because we're passing in the variable todo that corresponds to each todo item that will be looped through.
+            completedTodos++;
+        }
+    });
+
+    this.todos.forEach(function(todo){
+
+        if (completedTodos === totalTodos) {
+
+            //make everything false
+            todo.completed = false;
+        } else {
+            // make everything true
+            todo.completed = true;
+        }
+    });
+},
+```
+
+##### Requirement 2: view.displayTodos should use forEach
+Original code for `displayTodos`:
+
+```javascript
+displayTodos: function(){
+    var todosUL = document.querySelector("ul");
+    todosUL.innerHTML = "";
+
+    for(var i = 0; i < todoList.todos.length; i++) {
+
+        var todoLI = document.createElement("li");
+
+        var todoTextWithCompletion = "";
+        var todo = todoList.todos[i];
+
+        if(todo.completed === true) {
+            todoTextWithCompletion =" ( x ) " + todo.todoText;
+        } else {
+            todoTextWithCompletion =" (  ) " + todo.todoText;
+        }
+
+        todoLI.id = i;
+        todoLI.textContent = todoTextWithCompletion;
+        todoLI.appendChild(this.createDeleteButton());
+        todosUL.appendChild(todoLI);
+
+    }
+},
+```
+
+Modified version:
+
+```javascript
+displayTodos: function(){
+    var todosUL = document.querySelector("ul");
+    todosUL.innerHTML = "";
+
+    todoList.todos.forEach(function(todo, position){
+        var todoLI = document.createElement("li");
+
+        var todoTextWithCompletion = "";
+        // NO LONGER NEEDED var todo = todoList.todos[i];
+
+        if(todo.completed === true) {
+            todoTextWithCompletion =" ( x ) " + todo.todoText;
+        } else {
+            todoTextWithCompletion =" (  ) " + todo.todoText;
+        }
+
+        todoLI.id = position; // changed from a variable
+        todoLI.textContent = todoTextWithCompletion;
+        todoLI.appendChild(views.createDeleteButton());
+        todosUL.appendChild(todoLI);
+    });
+},
+```
+
+An example with `this` being used within our callback function :
+
+```javascript
+displayTodos: function(){
+    var todosUL = document.querySelector("ul");
+    todosUL.innerHTML = "";
+
+    todoList.todos.forEach(function(todo, position){
+        var todoLI = document.createElement("li");
+
+        var todoTextWithCompletion = "";
+        // NO LONGER NEEDED var todo = todoList.todos[i];
+
+        if(todo.completed === true) {
+            todoTextWithCompletion =" ( x ) " + todo.todoText;
+        } else {
+            todoTextWithCompletion =" (  ) " + todo.todoText;
+        }
+
+        todoLI.id = position; // changed from a variable
+        todoLI.textContent = todoTextWithCompletion;
+        todoLI.appendChild(this.createDeleteButton());
+        todosUL.appendChild(todoLI);
+    }, this); // THIS is added within our callback function 
+},
+```
