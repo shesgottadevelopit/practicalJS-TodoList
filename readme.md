@@ -15,5 +15,3 @@ Instead of using plnkr.co, I set up my own local environment for testing, creati
 FYI - to create a blank new page in Chrome, just type `about:blank` in the URL bar, this is helpful for versions 1-3.
 
 Things to further research include; MVC (Model View Controller)
-
-_completed 3/23/2017_
